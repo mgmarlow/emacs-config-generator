@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Emacs Config Generator</title>
-    <link rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css">
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css" />
   </head>
   <body>
     <header>
       <h1>Emacs 29 Config Generator</h1>
-      <p>Generate a starter configuration for Emacs with a bunch of the new fancy features in Emacs 29.</p>
+      <p>
+        Generate a starter configuration for Emacs with a bunch of the new fancy
+        features in Emacs 29.
+      </p>
     </header>
 
     <main>
       <article>
         <h2>Why?</h2>
-        <p>There's been some recent excitement around Emacs 29 and all of its fancy new features (LSP, tree-sitter), but learning Emacs is a long journey. This tool helps get you started without sacrificing the modern defaults you've come to expect from something like VSCode.</p>
-        <p>The generated configuration is also heavily annotated to help kickstart your hacking. A simple start to your own custom configuration in one Emacs Lisp file.</p>
+        <p>
+          There's been some recent excitement around Emacs 29 and all of its
+          fancy new features (LSP, tree-sitter), but learning Emacs is a long
+          journey. This tool helps get you started without sacrificing the
+          modern defaults you've come to expect from something like VSCode.
+        </p>
+        <p>
+          The generated configuration is also heavily annotated to help
+          kickstart your hacking. A simple start to your own custom
+          configuration in one Emacs Lisp file.
+        </p>
       </article>
 
       <hr />
@@ -39,9 +51,12 @@
 
       <article>
         <h2>Configure Your Emacs</h2>
-        <p>Fill out the options below to match your preferences. No wrong answers.</p>
+        <p>
+          Fill out the options below to match your preferences. No wrong
+          answers.
+        </p>
 
-        <form>
+        <form action="config" method="get">
           <div>
             <label for="theme">Theme:</label>
             <select id="" name="theme">

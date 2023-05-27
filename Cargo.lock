@@ -138,6 +138,7 @@ dependencies = [
  "axum",
  "eyre",
  "hyper",
+ "serde",
  "tokio",
  "tower",
 ]

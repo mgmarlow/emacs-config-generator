@@ -2,20 +2,34 @@ use askama::Template;
 use axum::{
     response::{Html, IntoResponse},
     routing::get,
-    Router,
+    Form, Router,
 };
 use eyre::Result;
 use hyper::StatusCode;
+use serde::Deserialize;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let app = Router::new().route("/", get(index));
+    let app = Router::new()
+        .route("/", get(index))
+        .route("/config", get(config));
 
     axum::Server::bind(&"0.0.0.0:3000".parse()?)
         .serve(app.into_make_service())
         .await?;
 
     Ok(())
+}
+
+#[derive(Deserialize, Debug, Template)]
+#[template(path = "config.html")]
+struct ConfigTemplate {
+    theme: String,
+}
+
+async fn config(Form(conf): Form<ConfigTemplate>) -> impl IntoResponse {
+    let template = ConfigTemplate { theme: conf.theme };
+    HtmlTemplate(template)
 }
 
 async fn index() -> impl IntoResponse {

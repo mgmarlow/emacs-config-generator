@@ -58,12 +58,127 @@
 
         <form action="config" method="get">
           <div>
+            <h3>Editor settings</h3>
+
+            <label for="font-family">Font family:</label>
+            <select id="family-select" name="font-family">
+              <!-- win: Consolas, mac: SF Mono; linux: DejaVu Sans Mono -->
+              <option value="system">System default</option>
+              <option value="menlo">Menlo</option>
+              <option value="monaco">Monaco</option>
+              <option value="consolas">Consolas</option>
+              <option value="ubunto-mono">Ubuntu Mono</option>
+              <option value="roboto-mono">Roboto Mono</option>
+            </select>
+
+            <label for="font-size">Font size:</label>
+            <input
+              id="font-size"
+              name="font-size"
+              type="number"
+              value="14"
+              min="2"
+              max="30"
+            />
+          </div>
+
+          <div>
             <label for="theme">Theme:</label>
-            <select id="" name="theme">
+            <select id="theme-select" name="theme">
               <option value="dark">dark</option>
               <option value="light">light</option>
               <option value="both">both (toggled)</option>
             </select>
+          </div>
+
+          <div>
+            <h3>Navigation and support</h3>
+
+            <div>
+              <input name="helpful" type="checkbox" id="helpful" checked />
+              <label for="helpful"
+                >Enhance built-in documentation with more helpful
+                descriptions</label
+              >
+            </div>
+
+            <div>
+              <input name="vim" type="checkbox" id="vim" />
+              <label for="vim">I prefer vim keybindings</label>
+            </div>
+          </div>
+
+          <div>
+            <h3>Notetaking with org-mode</h3>
+
+            <input name="denote" type="checkbox" id="denote" />
+            <label for="denote"
+              >I want a lightweight notetaking system that supports
+              backlinks</label
+            >
+          </div>
+
+          <div>
+            <h3>Programming languages and tools</h3>
+
+            <div>
+              <p>Add support for these languages:</p>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="typescript"
+                id="language-typescript"
+              />
+              <label for="language-typescript">TypeScript + JSX</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="rust"
+                id="language-rust"
+              />
+              <label for="language-rust">Rust</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="go"
+                id="language-go"
+              />
+              <label for="language-go">Go</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="lua"
+                id="language-lua"
+              />
+              <label for="language-lua">Lua</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="yaml"
+                id="language-yaml"
+              />
+              <label for="language-yaml">YAML</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="md"
+                id="language-md"
+              />
+              <label for="language-md">Markdown</label>
+            </div>
+
+            <p>Extras:</p>
+
+            <div>
+              <input name="magit" type="checkbox" id="magit" />
+              <label for="magit">I want a fully-featured git workflow</label>
+            </div>
           </div>
 
           <button type="submit">build config</button>

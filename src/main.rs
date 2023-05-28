@@ -14,6 +14,7 @@ async fn main() -> Result<()> {
         .route("/", get(index))
         .route("/config", get(config));
 
+    println!("Listening on http://localhost:3000");
     axum::Server::bind(&"0.0.0.0:3000".parse()?)
         .serve(app.into_make_service())
         .await?;
@@ -22,14 +23,14 @@ async fn main() -> Result<()> {
 }
 
 #[derive(Deserialize, Debug, Template)]
-#[template(path = "config.html")]
+#[template(path = "config.txt")]
 struct ConfigTemplate {
     theme: String,
 }
 
 async fn config(Form(conf): Form<ConfigTemplate>) -> impl IntoResponse {
     let template = ConfigTemplate { theme: conf.theme };
-    HtmlTemplate(template)
+    PlainTextTemplate(template)
 }
 
 async fn index() -> impl IntoResponse {
@@ -41,6 +42,8 @@ async fn index() -> impl IntoResponse {
 #[template(path = "index.html")]
 struct IndexTemplate {}
 
+struct PlainTextTemplate<T>(T);
+
 struct HtmlTemplate<T>(T);
 
 impl<T> IntoResponse for HtmlTemplate<T>
@@ -50,6 +53,22 @@ where
     fn into_response(self) -> axum::response::Response {
         match self.0.render() {
             Ok(html) => Html(html).into_response(),
+            Err(err) => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                format!("Failed to render template. Error: {}", err),
+            )
+                .into_response(),
+        }
+    }
+}
+
+impl<T> IntoResponse for PlainTextTemplate<T>
+where
+    T: Template,
+{
+    fn into_response(self) -> axum::response::Response {
+        match self.0.render() {
+            Ok(txt) => txt.into_response(),
             Err(err) => (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 format!("Failed to render template. Error: {}", err),

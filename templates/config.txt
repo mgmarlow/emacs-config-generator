@@ -1,9 +1,0 @@
-;;; Emacs configuration -*- lexical-binding: t -*-
-
-{% if theme == "light" %}
-(foo-light)
-{% else if theme == "dark" %}
-(foo-dark)
-{% else %}
-(foo-light-and-dark)
-{% endif %}

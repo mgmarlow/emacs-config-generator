@@ -23,7 +23,7 @@ async fn main() -> Result<()> {
 }
 
 #[derive(Deserialize, Debug, Template)]
-#[template(path = "config.txt")]
+#[template(path = "init.txt")]
 struct ConfigTemplate {
     theme: String,
 }

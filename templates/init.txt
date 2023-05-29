@@ -1,0 +1,74 @@
+;;; Emacs configuration -*- lexical-binding: t -*-
+;;;
+;;; Annotations are included for various options, but I recommend using
+;;; the built-in Emacs help to learn more about each configuration setting.
+;;; These three will come in handy:
+;;;
+;;; - variables: `C-h v` or `M-x describe-variable`
+;;; - commands: `C-h x` or `M-x describe-command`
+;;; - functions: `C-h f` or `M-x describe-function`
+
+;; Performance tweaking
+(setq gc-cons-threshold 100000000) ; 100 mb
+(setq read-process-output-max (* 1024 1024)) ; 1mb
+
+;; Adds a helpful message that tracks startup performance. Use this to
+;; help diagnose performance issues in your Emacs Lisp configuration.
+(add-hook 'emacs-startup-hook
+	  (lambda ()
+	    (message "Emacs loaded in %s."
+		     (emacs-init-time))))
+
+;; Remove UI clutter: hide the scrollbar, menubar, and toolbar. You may
+;; want to keep these on when you're getting started, though I recommend
+;; working through the Emacs tutorial instead.
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+;; TODO
+;; (set-face-attribute 'default nil :height 120)
+
+;; Unique buffer names for matching files, very useful when dealing
+;; with lots of index.ts, for example
+(require 'uniquify)
+
+;; TODO
+(electric-pair-mode t)
+(show-paren-mode 1)
+(setq-default indent-tabs-mode nil)
+(save-place-mode t)
+(savehist-mode t)
+(recentf-mode t)
+(global-auto-revert-mode t)
+
+;; Display line numbers when in programming modes
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
+;; TODO
+(setq uniquify-buffer-name-style 'forward
+      window-resize-pixelwise t
+      frame-resize-pixelwise t
+      load-prefer-newer t
+      backup-by-copying t
+      custom-file (expand-file-name "custom.el" user-emacs-directory))
+
+;; Set up package management with MELPA, an unofficial (but well-curated)
+;; package registry. This extends the default Emacs package registry
+;; GNU ELPA (https://elpa.gnu.org/).
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; A primer on use-package.
+;; TODO
+
+(use-package ef-themes
+  :ensure t
+  :config
+  {%+ if theme == "light" %}
+  (ef-themes-select 'ef-duo-light))
+  {% else %}
+  (ef-themes-select 'ef-autumn))
+  {% endif %}

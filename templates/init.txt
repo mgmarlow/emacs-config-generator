@@ -27,7 +27,7 @@
 (scroll-bar-mode -1)
 
 ;; TODO
-;; (set-face-attribute 'default nil :height 120)
+;; (set-face-attribute 'default nil :font "Foo Bar" :height 120)
 
 ;; Unique buffer names for matching files, very useful when dealing
 ;; with lots of index.ts, for example
@@ -35,15 +35,25 @@
 
 ;; TODO
 (electric-pair-mode t)
+
 (show-paren-mode 1)
+
 (setq-default indent-tabs-mode nil)
+
 (save-place-mode t)
+
 (savehist-mode t)
+
 (recentf-mode t)
+
 (global-auto-revert-mode t)
 
-;; Display line numbers when in programming modes
+{%+ if line_numbers == "everywhere" %}
+(display-line-numbers-mode)
+{% else %}
+;; Display line numbers only when in programming modes
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+{% endif %}
 
 ;; TODO
 (setq uniquify-buffer-name-style 'forward
@@ -54,16 +64,33 @@
       custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;; Set up package management with MELPA, an unofficial (but well-curated)
-;; package registry. This extends the default Emacs package registry
-;; GNU ELPA (https://elpa.gnu.org/).
+;; package registry. By default Emacs only uses GNU ELPA
+;; (https://elpa.gnu.org/).
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (unless package-archive-contents
   (package-refresh-contents))
 
-;; A primer on use-package.
-;; TODO
+;; A quick primer on the `use-package' function (refer to `C-h f use-package`
+;; for the full details). This package helps organize third-party packages from
+;; the `package-archives'. ":ensure t" ensures that the package is installed,
+;; fetching it from the package registry it it doesn't exist on your system.
+;; The other keyword arguments are for additional configuration. :config is
+;; a catch-all for functions you want run after the package is loaded, and
+;; basically every other keyword argument that you see could be equivalently
+;; used in :config. However, this file also uses :hook, :bind, and :custom
+;; to idiomatically define certain properties for the package.
+;;
+;; (use-package my-package
+;;   :ensure t    ; Ensure my-package is installed
+;;   :after foo   ; Load my-package only after foo is loaded (seldom used)
+;;   :init        ; Run this code before my-package is loaded
+;;   :bind        ; Bind these keys to these functions
+;;   :custom      ; Set these variables
+;;   :config      ; Run this code after my-package is loaded
 
+;; A package with a great selection of themes:
+;; https://protesilaos.com/emacs/ef-themes
 (use-package ef-themes
   :ensure t
   :config

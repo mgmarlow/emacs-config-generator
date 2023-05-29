@@ -9,10 +9,10 @@
   </head>
   <body>
     <header>
-      <h1>Emacs 29 Config Generator</h1>
+      <h1>Emacs Quick Start</h1>
       <p>
-        Generate a starter configuration for Emacs with a bunch of the new fancy
-        features in Emacs 29.
+        An opinionated configuration generator to help kickstart your future
+        hacking.
       </p>
     </header>
 
@@ -21,40 +21,51 @@
         <h2>Why?</h2>
         <p>
           There's been some recent excitement around Emacs 29 and all of its
-          fancy new features (LSP, tree-sitter), but learning Emacs is a long
-          journey. This tool helps get you started without sacrificing the
-          modern defaults you've come to expect from something like VSCode.
+          fancy new features (LSP, tree-sitter, etc.), but learning Emacs can be
+          a long journey. It doesn't help that the Emacs defaults are likely
+          very different from your experience with other text editors. This tool
+          seeks to remedy that new user experience with an opinionated
+          configuration based on your preferences.
         </p>
         <p>
-          The generated configuration is also heavily annotated to help
-          kickstart your hacking. A simple start to your own custom
-          configuration in one Emacs Lisp file.
+          The generated file is also heavily annotated with comments to help
+          explain some basic Emacs Lisp esoterica and guide your exploration.
+          This is by no means an Emacs Lisp tutorial; the best tutorial is the
+          one that ships within Emacs itself. That said, rocking your own
+          configuration is a great way to get started.
         </p>
       </article>
 
-      <hr />
+      <br />
 
       <article>
-        <h2>Install Emacs 29</h2>
+        <h2>Configure Your Emacs <sup>Emacs 29</sup></h2>
 
-        <h3>Mac OS</h3>
-        <p>todo</p>
+        <details>
+          <summary>Don't forget to install Emacs 29</summary>
 
-        <h3>Windows</h3>
-        <p>todo</p>
+          <ul>
+            <li>
+              <a
+                href="https://alpha.gnu.org/gnu/emacs/pretest/windows/emacs-29/?C=M;O=A"
+                >Mac OS</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://alpha.gnu.org/gnu/emacs/pretest/windows/emacs-29/?C=M;O=A"
+                >Windows</a
+              >
+            </li>
+            <li>
+              <a href="https://alpha.gnu.org/gnu/emacs/pretest/?C=M;O=D"
+                >Linux</a
+              >
+            </li>
+          </ul>
+        </details>
 
-        <h3>Linux</h3>
-        <p>todo</p>
-      </article>
-
-      <hr />
-
-      <article>
-        <h2>Configure Your Emacs</h2>
-        <p>
-          Fill out the options below to match your preferences. No wrong
-          answers.
-        </p>
+        <p>Fill out your preferences below. No wrong answers.</p>
 
         <form action="config" method="get">
           <div>
@@ -80,15 +91,22 @@
               min="2"
               max="30"
             />
-          </div>
 
-          <div>
-            <label for="theme">Theme:</label>
-            <select id="theme-select" name="theme">
-              <option value="dark">dark</option>
-              <option value="light">light</option>
-              <option value="both">both (toggled)</option>
-            </select>
+            <div>
+              <label for="theme">Theme:</label>
+              <select id="theme-select" name="theme">
+                <option value="dark">dark</option>
+                <option value="light">light</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="line-numbers">Line numbers</label>
+              <select id="line-numbers" name="line-numbers">
+                <option value="programming">Only in programming modes</option>
+                <option value="everywhere">Everywhere</option>
+              </select>
+            </div>
           </div>
 
           <div>
@@ -103,8 +121,20 @@
             </div>
 
             <div>
+              <input name="consult" type="checkbox" id="consult" />
+              <label for="consult"
+                >Enhance search and navigation commands</label
+              >
+            </div>
+
+            <div>
+              <input name="orderless" type="checkbox" id="orderless" />
+              <label for="orderless">Fuzzy completion style</label>
+            </div>
+
+            <div>
               <input name="vim" type="checkbox" id="vim" />
-              <label for="vim">I prefer vim keybindings</label>
+              <label for="vim">Prefer vim keybindings</label>
             </div>
           </div>
 
@@ -122,23 +152,15 @@
             <h3>Programming languages and tools</h3>
 
             <div>
-              <p>Add support for these languages:</p>
+              <p>Support these languages:</p>
 
               <input
                 name="language[]"
                 type="checkbox"
-                value="typescript"
-                id="language-typescript"
+                value="elixir"
+                id="language-elixir"
               />
-              <label for="language-typescript">TypeScript + JSX</label>
-
-              <input
-                name="language[]"
-                type="checkbox"
-                value="rust"
-                id="language-rust"
-              />
-              <label for="language-rust">Rust</label>
+              <label for="language-elixir">Elixir</label>
 
               <input
                 name="language[]"
@@ -159,25 +181,57 @@
               <input
                 name="language[]"
                 type="checkbox"
-                value="yaml"
-                id="language-yaml"
-              />
-              <label for="language-yaml">YAML</label>
-
-              <input
-                name="language[]"
-                type="checkbox"
                 value="md"
                 id="language-md"
               />
               <label for="language-md">Markdown</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="julia"
+                id="language-julia"
+              />
+              <label for="language-julia">Julia</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="php"
+                id="language-php"
+              />
+              <label for="language-php">PHP</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="typescript"
+                id="language-typescript"
+              />
+              <label for="language-typescript">TypeScript + JSX</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="rust"
+                id="language-rust"
+              />
+              <label for="language-rust">Rust</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="yaml"
+                id="language-yaml"
+              />
+              <label for="language-yaml">YAML</label>
             </div>
 
             <p>Extras:</p>
 
             <div>
               <input name="magit" type="checkbox" id="magit" />
-              <label for="magit">I want a fully-featured git workflow</label>
+              <label for="magit">Fully-featured git workflow</label>
             </div>
           </div>
 

@@ -22,14 +22,66 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-#[derive(Deserialize, Debug, Template)]
+#[derive(Deserialize, Debug)]
+struct EmacsConfig {
+    theme: String,
+    font_family: String,
+    go: Option<String>,
+    lua: Option<String>,
+    markdown: Option<String>,
+    php: Option<String>,
+    tsx: Option<String>,
+    rust: Option<String>,
+    yaml: Option<String>,
+}
+
+#[derive(Template)]
 #[template(path = "init.txt")]
 struct ConfigTemplate {
     theme: String,
+    font_family: String,
+    // helpful: bool,
+    // consult: bool,
+    // orderless: bool,
+    // vim: bool,
+    // denote: bool,
+    go: bool,
+    lua: bool,
+    markdown: bool,
+    php: bool,
+    tsx: bool,
+    rust: bool,
+    yaml: bool,
+    // magit: bool,
 }
 
-async fn config(Form(conf): Form<ConfigTemplate>) -> impl IntoResponse {
-    let template = ConfigTemplate { theme: conf.theme };
+impl Into<ConfigTemplate> for EmacsConfig {
+    fn into(self) -> ConfigTemplate {
+        ConfigTemplate {
+            font_family: if self.font_family.len() == 0 {
+                String::from("Monaco")
+            } else {
+                self.font_family
+            },
+            theme: if self.theme == "light" {
+                "'ef-duo-light"
+            } else {
+                "'ef-autumn"
+            }
+            .to_string(),
+            go: self.go.is_some(),
+            lua: self.lua.is_some(),
+            markdown: self.markdown.is_some(),
+            php: self.php.is_some(),
+            tsx: self.tsx.is_some(),
+            rust: self.rust.is_some(),
+            yaml: self.yaml.is_some(),
+        }
+    }
+}
+
+async fn config(Form(conf): Form<EmacsConfig>) -> impl IntoResponse {
+    let template: ConfigTemplate = conf.into();
     PlainTextTemplate(template)
 }
 

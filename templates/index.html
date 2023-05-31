@@ -71,25 +71,12 @@
           <div>
             <h3>Editor settings</h3>
 
-            <label for="font-family">Font family:</label>
-            <select id="family-select" name="font-family">
-              <!-- win: Consolas, mac: SF Mono; linux: DejaVu Sans Mono -->
-              <option value="system">System default</option>
-              <option value="menlo">Menlo</option>
-              <option value="monaco">Monaco</option>
-              <option value="consolas">Consolas</option>
-              <option value="ubunto-mono">Ubuntu Mono</option>
-              <option value="roboto-mono">Roboto Mono</option>
-            </select>
-
-            <label for="font-size">Font size:</label>
+            <label for="font_family">Font family:</label>
             <input
-              id="font-size"
-              name="font-size"
-              type="number"
-              value="14"
-              min="2"
-              max="30"
+              id="font_family"
+              name="font_family"
+              type="text"
+              value="Monaco"
             />
 
             <div>
@@ -97,14 +84,6 @@
               <select id="theme-select" name="theme">
                 <option value="dark">dark</option>
                 <option value="light">light</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="line-numbers">Line numbers</label>
-              <select id="line-numbers" name="line-numbers">
-                <option value="programming">Only in programming modes</option>
-                <option value="everywhere">Everywhere</option>
               </select>
             </div>
           </div>
@@ -152,76 +131,60 @@
             <h3>Programming languages and tools</h3>
 
             <div>
-              <p>Support these languages:</p>
+              <p>
+                Although Emacs supports a whole bunch of languages out of the
+                box (like Python, C, C++, etc.) it's likely you'll want to bring
+                a few extra modes along for the ride.
+              </p>
+              <p>Support these additional languages:</p>
 
-              <input
-                name="language[]"
-                type="checkbox"
-                value="elixir"
-                id="language-elixir"
-              />
-              <label for="language-elixir">Elixir</label>
-
-              <input
-                name="language[]"
-                type="checkbox"
-                value="go"
-                id="language-go"
-              />
+              <input name="go" type="checkbox" value="true" id="language-go" />
               <label for="language-go">Go</label>
 
               <input
-                name="language[]"
+                name="lua"
                 type="checkbox"
-                value="lua"
+                value="true"
                 id="language-lua"
               />
               <label for="language-lua">Lua</label>
 
               <input
-                name="language[]"
+                name="markdown"
                 type="checkbox"
-                value="md"
+                value="true"
                 id="language-md"
               />
               <label for="language-md">Markdown</label>
 
               <input
-                name="language[]"
+                name="php"
                 type="checkbox"
-                value="julia"
-                id="language-julia"
-              />
-              <label for="language-julia">Julia</label>
-
-              <input
-                name="language[]"
-                type="checkbox"
-                value="php"
+                value="true"
                 id="language-php"
               />
               <label for="language-php">PHP</label>
 
               <input
-                name="language[]"
+                name="tsx"
                 type="checkbox"
-                value="typescript"
+                value="true"
                 id="language-typescript"
               />
               <label for="language-typescript">TypeScript + JSX</label>
 
               <input
-                name="language[]"
+                name="rust"
                 type="checkbox"
-                value="rust"
+                value="true"
                 id="language-rust"
               />
               <label for="language-rust">Rust</label>
 
               <input
-                name="language[]"
+                name="yaml"
                 type="checkbox"
-                value="yaml"
+                value="true"
                 id="language-yaml"
               />
               <label for="language-yaml">YAML</label>

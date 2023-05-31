@@ -48,12 +48,8 @@
 
 (global-auto-revert-mode t)
 
-{%+ if line_numbers == "everywhere" %}
-(display-line-numbers-mode)
-{% else %}
 ;; Display line numbers only when in programming modes
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-{% endif %}
 
 ;; TODO
 (setq uniquify-buffer-name-style 'forward
@@ -94,8 +90,51 @@
 (use-package ef-themes
   :ensure t
   :config
-  {%+ if theme == "light" %}
-  (ef-themes-select 'ef-duo-light))
-  {% else %}
-  (ef-themes-select 'ef-autumn))
-  {% endif %}
+  (ef-themes-select {{ theme }}))
+
+{%~ if go == true %}
+(use-package go-mode
+  :ensure t
+  :bind (:map go-mode-map
+	      ("C-c C-f" . 'gofmt))
+  :hook (before-save . gofmt-before-save))
+{% endif %}
+
+{%~ if lua == true %}
+(use-package lua-mode
+  :ensure t)
+{% endif %}
+
+{%~ if markdown == true %}
+(use-package markdown-mode
+  :ensure t
+  :hook ((markdown-mode . visual-line-mode)
+         (markdown-mode . flyspell-mode))
+  :init
+  (setq markdown-command "multimarkdown"))
+{% endif %}
+
+{%~ if php == true %}
+(use-package php-mode
+  :ensure t)
+{% endif %}
+
+{%~ if tsx == true %}
+;;TODO
+{% endif %}
+
+{%~ if rust == true %}
+(use-package rust-mode
+  :ensure t
+  :bind (:map rust-mode-map
+	      ("C-c C-r" . 'rust-run)
+	      ("C-c C-c" . 'rust-compile)
+	      ("C-c C-f" . 'rust-format-buffer)
+	      ("C-c C-t" . 'rust-test))
+  :hook (rust-mode . prettify-symbols-mode))
+{% endif %}
+
+{%~ if yaml == true %}
+(use-package yaml-mode
+  :ensure t)
+{% endif %}

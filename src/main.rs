@@ -7,11 +7,13 @@ use axum::{
 use eyre::Result;
 use hyper::StatusCode;
 use serde::Deserialize;
+use tower_http::services::ServeDir;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let app = Router::new()
         .route("/", get(index))
+        .nest_service("/static", ServeDir::new("static"))
         .route("/config", get(config));
 
     println!("Listening on http://localhost:3000");

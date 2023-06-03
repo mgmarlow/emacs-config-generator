@@ -26,6 +26,9 @@ async fn main() -> Result<()> {
 struct EmacsConfig {
     theme: String,
     font_family: String,
+    helpful: Option<String>,
+    vim: Option<String>,
+    denote: Option<String>,
     go: Option<String>,
     lua: Option<String>,
     markdown: Option<String>,
@@ -33,6 +36,7 @@ struct EmacsConfig {
     tsx: Option<String>,
     rust: Option<String>,
     yaml: Option<String>,
+    magit: Option<String>,
 }
 
 #[derive(Template)]
@@ -40,11 +44,9 @@ struct EmacsConfig {
 struct ConfigTemplate {
     theme: String,
     font_family: String,
-    // helpful: bool,
-    // consult: bool,
-    // orderless: bool,
-    // vim: bool,
-    // denote: bool,
+    helpful: bool,
+    vim: bool,
+    denote: bool,
     go: bool,
     lua: bool,
     markdown: bool,
@@ -52,7 +54,7 @@ struct ConfigTemplate {
     tsx: bool,
     rust: bool,
     yaml: bool,
-    // magit: bool,
+    magit: bool,
 }
 
 impl Into<ConfigTemplate> for EmacsConfig {
@@ -69,6 +71,9 @@ impl Into<ConfigTemplate> for EmacsConfig {
                 "'ef-autumn"
             }
             .to_string(),
+            helpful: self.helpful.is_some(),
+            vim: self.vim.is_some(),
+            denote: self.denote.is_some(),
             go: self.go.is_some(),
             lua: self.lua.is_some(),
             markdown: self.markdown.is_some(),
@@ -76,6 +81,7 @@ impl Into<ConfigTemplate> for EmacsConfig {
             tsx: self.tsx.is_some(),
             rust: self.rust.is_some(),
             yaml: self.yaml.is_some(),
+            magit: self.magit.is_some(),
         }
     }
 }

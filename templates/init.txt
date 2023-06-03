@@ -1,14 +1,15 @@
 ;;; Emacs configuration -*- lexical-binding: t -*-
 ;;;
-;;; Annotations are included for various options, but I recommend using
-;;; the built-in Emacs help to learn more about each configuration setting.
-;;; These three will come in handy:
+;;; Save this file to ~/.emacs.d/init.el.
+;;; Afterwards, boot up Emacs and learn more about the contents
+;;; of this file by reviewing the comments and using the built-in
+;;; help system:
 ;;;
 ;;; - variables: `C-h v` or `M-x describe-variable`
 ;;; - commands: `C-h x` or `M-x describe-command`
 ;;; - functions: `C-h f` or `M-x describe-function`
 
-;; Performance tweaking
+;; Performance tweaking, setting sane defaults for modern machines.
 (setq gc-cons-threshold 100000000) ; 100 mb
 (setq read-process-output-max (* 1024 1024)) ; 1mb
 
@@ -26,42 +27,47 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
-;; TODO
-;; (set-face-attribute 'default nil :font "Foo Bar" :height 120)
+;; height = px * 100
+(set-face-attribute 'default nil :font "{{ font_family }}" :height 120)
 
-;; Unique buffer names for matching files, very useful when dealing
-;; with lots of index.ts, for example
+;; Unique buffer names in the minibuffer where there are many identical files.
+;; Super useful if you rely on folders for organization, say, foo/index.ts and
+;; bar/index.ts.
 (require 'uniquify)
 
-;; TODO
-(electric-pair-mode t)
-
-(show-paren-mode 1)
-
-(setq-default indent-tabs-mode nil)
-
-(save-place-mode t)
-
-(savehist-mode t)
-
-(recentf-mode t)
-
-(global-auto-revert-mode t)
+;; A number of misc. modes and variable tweaks follow this comment, adding in
+;; functionality that I consider a "better default" Emacs experience. You can
+;; learn more about each of these modes and commands by looking up the mode
+;; via `C-h x electric-pair-mode`.
+(electric-pair-mode t)               ; Automatically insert closing parens
+(show-paren-mode 1)                  ; Visualize matching parens
+(setq-default indent-tabs-mode nil)  ; Prefer spaces to tabs
+(save-place-mode t)                  ; Automatically save your place in files
+(savehist-mode t)                    ; Save history in minibuffer to keep recent commands easily accessible
+(recentf-mode t)                     ; Keep track of open files
+(global-auto-revert-mode t)          ; Keep files up-to-date when they change outside Emacs
 
 ;; Display line numbers only when in programming modes
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
-;; TODO
+;; You can look up these variables with `C-h v variable-name`.
 (setq uniquify-buffer-name-style 'forward
       window-resize-pixelwise t
       frame-resize-pixelwise t
       load-prefer-newer t
       backup-by-copying t
+      ;; I'll add an extra note here since user customizations are important.
+      ;; Emacs actually offers a UI-based customization menu, `M-x customize`.
+      ;; You can use this menu to change variable values across Emacs. By default,
+      ;; changing a variable will write to your `init.el` automatically, mixing
+      ;; your hand-written Emacs Lisp with automatically-generated Lisp from the
+      ;; customize menu. The following setting instead writes customizations to a
+      ;; separate file, `custom.el`, to keep your `init.el` clean.
       custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;; Set up package management with MELPA, an unofficial (but well-curated)
-;; package registry. By default Emacs only uses GNU ELPA
-;; (https://elpa.gnu.org/).
+;; package registry. By default Emacs only uses GNU ELPA and NonGNU ELPA.
+;; https://elpa.gnu.org/, https://elpa.nongnu.org/.
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (unless package-archive-contents
@@ -92,36 +98,187 @@
   :config
   (ef-themes-select {{ theme }}))
 
+;; An Emacs completion framework. Minibuffer completion is essential to your
+;; Emacs experience, and Vertico is currently one of the best. It's worth
+;; diving into the details here and reading "Understanding Minibuffer Completion"
+;; by Mickey Peterson (linked below). Getting minibuffer completion right will
+;; help accelerate your Emacs learning by orders of magnitude, making it easy
+;; to locate and discover commands for your day-to-day editing tasks.
+;; https://www.masteringemacs.org/article/understanding-minibuffer-completion
+;; https://elpa.gnu.org/packages/vertico.html
+(use-package vertico
+  :ensure t
+  :custom
+  (vertico-cycle t)
+  (read-buffer-completion-ignore-case t)
+  (read-file-name-completion-ignore-case t)
+  (completion-styles '(basic substring partial-completion flex))
+  :init
+  (vertico-mode))
+
+;; Adds annotations to your minibuffer to improve the accessibility of
+;; Emac's documentation.
+;; https://elpa.gnu.org/packages/marginalia.html
+(use-package marginalia
+  :after vertico
+  :ensure t
+  :init
+  (marginalia-mode))
+
+{%~ if helpful == true %}
+;; Adds contextual information to Emacs help documentation, making it
+;; easier to locate code examples and see sample usage when looking
+;; up functions or variables.
+;; https://github.com/Wilfred/helpful
+(use-package helpful
+  :ensure t
+  :bind (("C-h f" . #'helpful-callable)
+         ("C-h v" . #'helpful-variable)
+         ("C-h k" . #'helpful-key)
+         ("C-c C-d" . #'helpful-at-point)
+         ("C-h F" . #'helpful-function)
+         ("C-h C" . #'helpful-command)))
+{%- endif %}
+
+;; Adds intellisense-style code completion at point. Works great with
+;; LSP via Eglot. Note that you'll likely want to configure this one
+;; to match your editing preferences, there's no one-size-fits-all
+;; solution.
+;; https://elpa.gnu.org/packages/corfu.html
+(use-package corfu
+  :ensure t
+  :init
+  (global-corfu-mode)
+  :custom
+  (corfu-auto t)
+  ;; You may want to play with delay/prefix/styles to suit your preferences.
+  (corfu-auto-delay 0)
+  (corfu-auto-prefix 0)
+  (completion-styles '(basic)))
+
+;; Adds LSP support. Note that you must have the respective LSP
+;; server installed on your machine to use it with Eglot. e.g. I
+;; must have rust-analyzer installed to use Eglot with `rust-mode'.
+;; https://joaotavora.github.io/eglot/
+(use-package eglot
+  :ensure t
+  :bind (("s-<mouse-1>" . eglot-find-implementation)
+         ("C-c ." . eglot-code-action-quickfix))
+  ;; Add your programming modes here to automatically start eglot,
+  ;; assuming you have the respective LSP server installed.
+  ;; :hook ((rust-mode . eglot-ensure))
+  :config
+  ;; You can configure additional LSP servers by modifying
+  ;; `eglot-server-programs'. The following tells eglot to use TypeScript
+  ;; language server when working in `web-mode'.
+  (add-to-list 'eglot-server-programs
+               '(web-mode . ("typescript-language-server" "--stdio"))))
+
+{%~ if vim == true %}
+;; Adds vim emulation to Emacs. Activating `evil-mode' (which the below does
+;; for all buffers) will swap your keybindings to modal-based vim. That said,
+;; Emacs is a lot more than just editing text. Evil Collection provides a
+;; compatibility layer between Emacs packages and vim keybindings that may not
+;; exist in `evil-mode'. A good example is `dired': with Evil Collection
+;; you can navigate files and directories with vim keybindings instead of the
+;; usual C-p & C-n.
+;; https://github.com/emacs-evil/evil
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1))
+
+;; Adds better Evil defaults for most built-in packages
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+{% endif -%}
+
+{%~ if denote == true %}
+;; `org-mode' is great but Denote makes it even better. Denote helps organize
+;; your org (or plain text/markdown) notes with a intelligent naming scheme
+;; and some helpful utilities. I highly recommend reading the manual:
+;; https://protesilaos.com/emacs/denote
+(use-package denote
+  :ensure t
+  :custom
+  (denote-known-keywords '("emacs" "journal"))
+  ;; This directory is where your notes live.
+  (denote-directory (expand-file-name "~/denote/"))
+  :bind
+  (("C-c n n" . denote)
+   ("C-c n f" . denote-open-or-create)
+   ("C-c n i" . denote-link)))
+{% endif -%}
+
+{%~ if magit == true %}
+;; Adds a fully-featured git client to Emacs. After working with Magit you'll
+;; never want to go back to the git CLI. Activate it with `C-c g`.
+;; https://magit.vc/
+(use-package magit
+  :ensure t
+  :bind (("C-c g" . magit-status)))
+{% endif -%}
+
 {%~ if go == true %}
 (use-package go-mode
   :ensure t
   :bind (:map go-mode-map
 	      ("C-c C-f" . 'gofmt))
   :hook (before-save . gofmt-before-save))
-{% endif %}
+{% endif -%}
 
 {%~ if lua == true %}
 (use-package lua-mode
   :ensure t)
-{% endif %}
+{% endif -%}
 
 {%~ if markdown == true %}
 (use-package markdown-mode
   :ensure t
+  ;; These extra modes help clean up the Markdown editing experience.
+  ;; `visual-line-mode' turns on word wrap and helps editing commands
+  ;; work with paragraphs of text. `flyspell-mode' turns on an
+  ;; automatic spell checker.
   :hook ((markdown-mode . visual-line-mode)
          (markdown-mode . flyspell-mode))
   :init
   (setq markdown-command "multimarkdown"))
-{% endif %}
+{% endif -%}
 
 {%~ if php == true %}
+;; Note that `php-mode' assumes php code is separated from HTML code,
+;; following modern Laravel best practices. If you'd like to combine
+;; PHP and HTML in a single file, you may prefer `web-mode'.
 (use-package php-mode
   :ensure t)
-{% endif %}
+{% endif -%}
 
 {%~ if tsx == true %}
-;;TODO
-{% endif %}
+;; Typescript, JS, & React support is provided by web-mode. This differs
+;; from other programming languages because TSX is really multi-language
+;; by design, including both TypeScript and HTML in a single file. I've
+;; found web-mode provides the best TSX experience and works equally well
+;; for plain ol' JS or TS.
+(use-package web-mode
+  :ensure t
+  :mode (("\\.ts\\'" . web-mode)
+         ("\\.js\\'" . web-mode)
+         ("\\.mjs\\'" . web-mode)
+         ("\\.tsx\\'" . web-mode)
+         ("\\.jsx\\'" . web-mode))
+  :custom
+  (web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
+  (web-mode-code-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  (web-mode-markup-indent-offset 2)
+  (web-mode-enable-auto-quoting nil))
+{% endif -%}
 
 {%~ if rust == true %}
 (use-package rust-mode
@@ -132,9 +289,9 @@
 	      ("C-c C-f" . 'rust-format-buffer)
 	      ("C-c C-t" . 'rust-test))
   :hook (rust-mode . prettify-symbols-mode))
-{% endif %}
+{% endif -%}
 
 {%~ if yaml == true %}
 (use-package yaml-mode
   :ensure t)
-{% endif %}
+{% endif -%}

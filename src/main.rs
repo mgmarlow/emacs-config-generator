@@ -16,8 +16,7 @@ async fn main() -> Result<()> {
         .nest_service("/static", ServeDir::new("static"))
         .route("/config", get(config));
 
-    println!("Listening on http://localhost:3000");
-    axum::Server::bind(&"0.0.0.0:3000".parse()?)
+    axum::Server::bind(&"0.0.0.0:8080".parse()?)
         .serve(app.into_make_service())
         .await?;
 

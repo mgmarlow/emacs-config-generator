@@ -2,12 +2,17 @@ use askama::Template;
 use axum::{
     response::{Html, IntoResponse},
     routing::get,
-    Form, Router,
+    Router,
 };
 use eyre::Result;
 use hyper::StatusCode;
+use languages::create_language_string;
+use query_extractor::Query;
 use serde::Deserialize;
 use tower_http::services::ServeDir;
+
+mod languages;
+mod query_extractor;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -30,13 +35,7 @@ struct EmacsConfig {
     helpful: Option<String>,
     vim: Option<String>,
     denote: Option<String>,
-    go: Option<String>,
-    lua: Option<String>,
-    markdown: Option<String>,
-    php: Option<String>,
-    tsx: Option<String>,
-    rust: Option<String>,
-    yaml: Option<String>,
+    language: Option<Vec<String>>,
     magit: Option<String>,
 }
 
@@ -48,14 +47,8 @@ struct ConfigTemplate {
     helpful: bool,
     vim: bool,
     denote: bool,
-    go: bool,
-    lua: bool,
-    markdown: bool,
-    php: bool,
-    tsx: bool,
-    rust: bool,
-    yaml: bool,
     magit: bool,
+    languages: String,
 }
 
 impl Into<ConfigTemplate> for EmacsConfig {
@@ -75,19 +68,16 @@ impl Into<ConfigTemplate> for EmacsConfig {
             helpful: self.helpful.is_some(),
             vim: self.vim.is_some(),
             denote: self.denote.is_some(),
-            go: self.go.is_some(),
-            lua: self.lua.is_some(),
-            markdown: self.markdown.is_some(),
-            php: self.php.is_some(),
-            tsx: self.tsx.is_some(),
-            rust: self.rust.is_some(),
-            yaml: self.yaml.is_some(),
             magit: self.magit.is_some(),
+            languages: match &self.language {
+                Some(l) => create_language_string(l),
+                None => String::from(""),
+            },
         }
     }
 }
 
-async fn config(Form(conf): Form<EmacsConfig>) -> impl IntoResponse {
+async fn config(Query(conf): Query<EmacsConfig>) -> impl IntoResponse {
     let template: ConfigTemplate = conf.into();
     PlainTextTemplate(template)
 }

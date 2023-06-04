@@ -5,14 +5,20 @@ use axum::{
     Router,
 };
 use eyre::Result;
+use features::Features;
 use hyper::StatusCode;
-use languages::create_language_string;
+use languages::Languages;
 use query_extractor::Query;
 use serde::Deserialize;
 use tower_http::services::ServeDir;
 
+mod features;
 mod languages;
 mod query_extractor;
+
+pub trait ConfigBuilder {
+    fn build_string(options: Option<Vec<String>>) -> String;
+}
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -32,11 +38,8 @@ async fn main() -> Result<()> {
 struct EmacsConfig {
     theme: String,
     font_family: String,
-    helpful: Option<String>,
-    vim: Option<String>,
-    denote: Option<String>,
+    feature: Option<Vec<String>>,
     language: Option<Vec<String>>,
-    magit: Option<String>,
 }
 
 #[derive(Template)]
@@ -44,10 +47,7 @@ struct EmacsConfig {
 struct ConfigTemplate {
     theme: String,
     font_family: String,
-    helpful: bool,
-    vim: bool,
-    denote: bool,
-    magit: bool,
+    features: String,
     languages: String,
 }
 
@@ -65,14 +65,8 @@ impl Into<ConfigTemplate> for EmacsConfig {
                 "'ef-autumn"
             }
             .to_string(),
-            helpful: self.helpful.is_some(),
-            vim: self.vim.is_some(),
-            denote: self.denote.is_some(),
-            magit: self.magit.is_some(),
-            languages: match &self.language {
-                Some(l) => create_language_string(l),
-                None => String::from(""),
-            },
+            features: Features::build_string(self.feature),
+            languages: Languages::build_string(self.language),
         }
     }
 }

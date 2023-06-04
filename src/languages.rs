@@ -1,3 +1,5 @@
+use crate::ConfigBuilder;
+
 const GO: &str = r#"
 (use-package go-mode
   :ensure t
@@ -69,25 +71,30 @@ const YAML: &str = r#"
   :ensure t)
 "#;
 
-pub fn create_language_string(languages: &Vec<String>) -> String {
-    let mut result = String::new();
+pub struct Languages {}
 
-    for language in languages {
-        let config = match language.as_str() {
-            "go" => Some(GO),
-            "lua" => Some(LUA),
-            "markdown" => Some(MARKDOWN),
-            "php" => Some(PHP),
-            "tsx" => Some(TSX),
-            "rust" => Some(RUST),
-            "yaml" => Some(YAML),
-            _ => None,
-        };
+impl ConfigBuilder for Languages {
+    fn build_string(options: Option<Vec<String>>) -> String {
+        let languages = options.unwrap_or_default();
+        let mut result = String::new();
 
-        if let Some(config) = config {
-            result = result + config;
+        for lang in languages {
+            let config = match lang.as_str() {
+                "go" => Some(GO),
+                "lua" => Some(LUA),
+                "markdown" => Some(MARKDOWN),
+                "php" => Some(PHP),
+                "tsx" => Some(TSX),
+                "rust" => Some(RUST),
+                "yaml" => Some(YAML),
+                _ => None,
+            };
+
+            if let Some(config) = config {
+                result = result + config;
+            }
         }
-    }
 
-    result
+        result
+    }
 }

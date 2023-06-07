@@ -7,7 +7,7 @@ use axum::{
 use eyre::Result;
 use features::Features;
 use hyper::StatusCode;
-use languages::Languages;
+use languages::{eglot, Languages};
 use query_extractor::Query;
 use serde::Deserialize;
 use tower_http::services::ServeDir;
@@ -47,6 +47,7 @@ struct EmacsConfig {
 struct ConfigTemplate {
     theme: String,
     font_family: String,
+    eglot: String,
     features: String,
     languages: String,
 }
@@ -65,6 +66,7 @@ impl Into<ConfigTemplate> for EmacsConfig {
                 "'ef-autumn"
             }
             .to_string(),
+            eglot: eglot(self.language.clone().unwrap_or_default()),
             features: Features::build_string(self.feature),
             languages: Languages::build_string(self.language),
         }

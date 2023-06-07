@@ -142,23 +142,7 @@
   (corfu-auto-prefix 0)
   (completion-styles '(basic)))
 
-;; Adds LSP support. Note that you must have the respective LSP
-;; server installed on your machine to use it with Eglot. e.g. I
-;; must have rust-analyzer installed to use Eglot with `rust-mode'.
-;; https://joaotavora.github.io/eglot/
-(use-package eglot
-  :ensure t
-  :bind (("s-<mouse-1>" . eglot-find-implementation)
-         ("C-c ." . eglot-code-action-quickfix))
-  ;; Add your programming modes here to automatically start eglot,
-  ;; assuming you have the respective LSP server installed.
-  ;; :hook ((rust-mode . eglot-ensure))
-  :config
-  ;; You can configure additional LSP servers by modifying
-  ;; `eglot-server-programs'. The following tells eglot to use TypeScript
-  ;; language server when working in `web-mode'.
-  (add-to-list 'eglot-server-programs
-               '(web-mode . ("typescript-language-server" "--stdio"))))
+{{~ eglot -}}
 
 {{~ features -}}
 

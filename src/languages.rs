@@ -71,6 +71,56 @@ const YAML: &str = r#"
   :ensure t)
 "#;
 
+pub fn eglot(languages: Vec<String>) -> String {
+    let hooks: Vec<String> = languages
+        .iter()
+        .filter_map(|l| match l.as_str() {
+            "go" => Some(String::from("(go-mode . eglot-ensure)")),
+            "tsx" => Some(String::from("(web-mode . eglot-ensure)")),
+            "rust" => Some(String::from("(rust-mode . eglot-ensure)")),
+            _ => None,
+        })
+        .collect();
+
+    let hooks_extra: String = if hooks.len() > 0 {
+        format!(
+            r#"
+  ;; Add your programming modes here to automatically start eglot,
+  ;; assuming you have the respective LSP server installed.
+  :hook ({:})"#,
+            hooks.join("\n         "),
+        )
+    } else {
+        String::from("")
+    };
+
+    let web_mode_extra: &str = if languages.contains(&String::from("tsx")) {
+        r#"
+  :config
+  ;; You can configure additional LSP servers by modifying
+  ;; `eglot-server-programs'. The following tells eglot to use TypeScript
+  ;; language server when working in `web-mode'.
+  (add-to-list 'eglot-server-programs
+               '(web-mode . ("typescript-language-server" "--stdio")))"#
+    } else {
+        ""
+    };
+
+    format!(
+        r#"
+;; Adds LSP support. Note that you must have the respective LSP
+;; server installed on your machine to use it with Eglot. e.g. I
+;; must have rust-analyzer installed to use Eglot with `rust-mode'.
+;; https://joaotavora.github.io/eglot/
+(use-package eglot
+  :ensure t
+  :bind (("s-<mouse-1>" . eglot-find-implementation)
+         ("C-c ." . eglot-code-action-quickfix)){:}{:})
+"#,
+        hooks_extra, web_mode_extra
+    )
+}
+
 pub struct Languages {}
 
 impl ConfigBuilder for Languages {
@@ -96,5 +146,68 @@ impl ConfigBuilder for Languages {
         }
 
         result
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_eglot() {
+        assert_eq!(
+            eglot(vec![]),
+            r#"
+;; Adds LSP support. Note that you must have the respective LSP
+;; server installed on your machine to use it with Eglot. e.g. I
+;; must have rust-analyzer installed to use Eglot with `rust-mode'.
+;; https://joaotavora.github.io/eglot/
+(use-package eglot
+  :ensure t
+  :bind (("s-<mouse-1>" . eglot-find-implementation)
+         ("C-c ." . eglot-code-action-quickfix)))
+"#,
+        );
+
+        assert_eq!(
+            eglot(vec![String::from("go"), String::from("rust")]),
+            r#"
+;; Adds LSP support. Note that you must have the respective LSP
+;; server installed on your machine to use it with Eglot. e.g. I
+;; must have rust-analyzer installed to use Eglot with `rust-mode'.
+;; https://joaotavora.github.io/eglot/
+(use-package eglot
+  :ensure t
+  :bind (("s-<mouse-1>" . eglot-find-implementation)
+         ("C-c ." . eglot-code-action-quickfix))
+  ;; Add your programming modes here to automatically start eglot,
+  ;; assuming you have the respective LSP server installed.
+  :hook ((go-mode . eglot-ensure)
+         (rust-mode . eglot-ensure)))
+"#,
+        );
+
+        assert_eq!(
+            eglot(vec![String::from("tsx")]),
+            r#"
+;; Adds LSP support. Note that you must have the respective LSP
+;; server installed on your machine to use it with Eglot. e.g. I
+;; must have rust-analyzer installed to use Eglot with `rust-mode'.
+;; https://joaotavora.github.io/eglot/
+(use-package eglot
+  :ensure t
+  :bind (("s-<mouse-1>" . eglot-find-implementation)
+         ("C-c ." . eglot-code-action-quickfix))
+  ;; Add your programming modes here to automatically start eglot,
+  ;; assuming you have the respective LSP server installed.
+  :hook ((web-mode . eglot-ensure))
+  :config
+  ;; You can configure additional LSP servers by modifying
+  ;; `eglot-server-programs'. The following tells eglot to use TypeScript
+  ;; language server when working in `web-mode'.
+  (add-to-list 'eglot-server-programs
+               '(web-mode . ("typescript-language-server" "--stdio"))))
+"#,
+        );
     }
 }

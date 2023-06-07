@@ -32,215 +32,259 @@
     </header>
 
     <main>
-      <h2>Why?</h2>
-      <p>
-        Emacs is great and more people should try it. Jumping into
-        <a href="https://github.com/doomemacs/doomemacs">Doom</a> seems like a
-        smart way to cut past the learning curve, but I think it's better to
-        start your own configuration and learn Emacs Lisp without introducing
-        additional layers of complexity.
-      </p>
-      <p>
-        This form helps kickstart your hacking with a modern-feeling
-        configuration while only relying on a single file of Emacs Lisp. It
-        assumes Emacs 29 (the soon-to-be
-        <a
-          href="https://lists.gnu.org/archive/html/emacs-devel/2023-05/msg00379.html"
-          >latest version</a
-        >) and takes advantage of many of its
-        <a
-          href="https://git.savannah.gnu.org/cgit/emacs.git/tree/etc/NEWS?h=emacs-29"
-          >new features</a
-        >. The generated file is also heavily annotated with comments to help
-        explain some basic Emacs Lisp esoterica to guide your exploration.
-      </p>
+      <div>
+        <h2>Why?</h2>
+        <p>
+          Emacs is great and more people should try it. Jumping into
+          <a href="https://github.com/doomemacs/doomemacs">Doom</a> seems like a
+          smart way to cut past the learning curve, but I think it's better to
+          start your own configuration and learn Emacs Lisp without introducing
+          additional layers of complexity.
+        </p>
+        <p>
+          This form helps kickstart your hacking with a modern-feeling
+          configuration while only relying on a single file of Emacs Lisp. It
+          assumes Emacs 29 (the
+          <a
+            href="https://lists.gnu.org/archive/html/emacs-devel/2023-05/msg00379.html"
+            >soon-to-be latest version</a
+          >) and takes advantage of many of its
+          <a
+            href="https://git.savannah.gnu.org/cgit/emacs.git/tree/etc/NEWS?h=emacs-29"
+            >new features</a
+          >. The generated file is also heavily annotated with comments to help
+          explain some basic Emacs Lisp esoterica to guide your exploration.
+        </p>
 
-      <h2>Configure Your Emacs</h2>
-
-      <details>
-        <summary>Don't forget to install Emacs 29</summary>
-
+        <h3>What's in the config?</h3>
+        <p>Along with your selected preferences, you get:</p>
         <ul>
           <li>
-            <a href="https://github.com/d12frosted/homebrew-emacs-plus"
-              >Mac OS</a
-            >
+            <strong>Opinionated defaults</strong> that encorporate lots of
+            goodies from Phil Hagelberg's
+            <a href="https://git.sr.ht/~technomancy/better-defaults"
+              >better defaults</a
+            >, among other hand-picked settings.
           </li>
           <li>
-            <a
-              href="https://alpha.gnu.org/gnu/emacs/pretest/windows/emacs-29/?C=M;O=A"
-              >Windows</a
-            >
+            <strong>Feature packages</strong> that augment the Emacs baseline
+            with extra functionality, including
+            <a href="https://elpa.gnu.org/packages/vertico.html">Vertico</a>,
+            <a href="https://elpa.gnu.org/packages/corfu.html">Corfu</a>, and
+            <a href="https://elpa.gnu.org/packages/marginalia.html"
+              >Marginalia</a
+            >.
           </li>
           <li>
-            <a href="https://alpha.gnu.org/gnu/emacs/pretest/?C=M;O=D">Linux</a>
+            <strong>Language support</strong> for many programming languages not
+            supported OOTB.
+          </li>
+          <li>
+            <strong>Code comments</strong> that annotate all the important stuff
+            to help you you hack the config to your taste.
           </li>
         </ul>
-      </details>
+      </div>
 
-      <details>
-        <summary>What do I do after I download the file?</summary>
-
+      <div>
+        <h2>Get started</h2>
         <p>
-          Drop it into your Emacs home directory as <code>init.el</code>, e.g.
-          <code>~/.emacs.d/init.el</code>. More information is available
+          First, download Emacs 29. Then fill out the form below and generate
+          your config file. Take that file and drop it into your
           <a
             href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html"
-            >in the manual</a
-          >.
+            >Emacs home directory</a
+          >. If you don't know where that is, use
+          <code>~/.config/emacs/init.el</code>.
         </p>
-      </details>
 
-      <form action="config" method="get">
-        <div>
-          <h4>Editor settings</h4>
+        <details>
+          <summary>Emacs 29 download links</summary>
 
-          <label for="font_family">Font family:</label>
-          <input
-            id="font_family"
-            name="font_family"
-            type="text"
-            value="Monaco"
-          />
+          <ul>
+            <li>
+              <a href="https://github.com/d12frosted/homebrew-emacs-plus"
+                >Mac OS</a
+              >
+              (via homebrew)
+            </li>
+            <li>
+              <a
+                href="https://alpha.gnu.org/gnu/emacs/pretest/windows/emacs-29/?C=M;O=A"
+                >Windows</a
+              >
+            </li>
+            <li>
+              <a href="https://alpha.gnu.org/gnu/emacs/pretest/?C=M;O=D"
+                >Linux</a
+              >
+            </li>
+          </ul>
+        </details>
 
+        <h3>Configure Your Emacs</h3>
+
+        <form action="config" method="get">
           <div>
-            <label for="theme">Theme:</label>
-            <select id="theme-select" name="theme">
-              <option value="dark">dark</option>
-              <option value="light">light</option>
-            </select>
-          </div>
-        </div>
+            <h4>Editor settings</h4>
 
-        <div>
-          <h4>Helpful packages</h4>
-
-          <p>
-            This Emacs configuration includes LSP, code-completion, and a number
-            of tweaks to the default Emacs settings for a "modern-feeling"
-            experience. Below are some extra packages that may suit your style.
-          </p>
-
-          <div>
+            <label for="font_family">Font family:</label>
             <input
-              name="feature[]"
-              type="checkbox"
-              id="helpful"
-              checked
-              value="helpful"
+              id="font_family"
+              name="font_family"
+              type="text"
+              value="Monaco"
             />
-            <label for="helpful"
-              >Enhance built-in documentation with examples</label
-            >
+
+            <div>
+              <label for="theme">Theme:</label>
+              <select id="theme-select" name="theme">
+                <option value="dark">dark</option>
+                <option value="light">light</option>
+              </select>
+            </div>
           </div>
 
           <div>
-            <input name="feature[]" type="checkbox" id="vim" value="vim" />
-            <label for="vim">Use vim keybindings</label>
-          </div>
+            <h4>Helpful packages</h4>
 
-          <div>
-            <input
-              name="feature[]"
-              type="checkbox"
-              id="denote"
-              value="denote"
-            />
-            <label for="denote">Add a lightweight notetaking system</label>
-          </div>
-
-          <div>
-            <input name="feature[]" type="checkbox" id="magit" value="magit" />
-            <label for="magit">Add a fully-featured git workflow</label>
-          </div>
-        </div>
-
-        <div>
-          <h4>Programming languages and tools</h4>
-
-          <div>
             <p>
-              Although Emacs supports a whole bunch of languages out of the box
-              (Python, C, C++, etc.) it's likely you'll want to bring a few
-              extra modes along for the ride.
+              This Emacs configuration includes LSP, code-completion, and a
+              number of tweaks to the default Emacs settings for a
+              "modern-feeling" experience. Below are some extra packages that
+              may suit your style.
             </p>
-            <p>Support these additional languages:</p>
 
-            <input
-              name="language[]"
-              type="checkbox"
-              value="go"
-              id="language-go"
-            />
-            <label for="language-go">Go</label>
+            <div>
+              <input
+                name="feature[]"
+                type="checkbox"
+                id="helpful"
+                checked
+                value="helpful"
+              />
+              <label for="helpful"
+                >Enhance built-in documentation with examples</label
+              >
+            </div>
 
-            <input
-              name="language[]"
-              type="checkbox"
-              value="lua"
-              id="language-lua"
-            />
-            <label for="language-lua">Lua</label>
+            <div>
+              <input name="feature[]" type="checkbox" id="vim" value="vim" />
+              <label for="vim">Use vim keybindings</label>
+            </div>
 
-            <input
-              name="language[]"
-              type="checkbox"
-              value="markdown"
-              id="language-md"
-            />
-            <label for="language-md">Markdown</label>
+            <div>
+              <input
+                name="feature[]"
+                type="checkbox"
+                id="denote"
+                value="denote"
+              />
+              <label for="denote">Add a lightweight notetaking system</label>
+            </div>
 
-            <input
-              name="language[]"
-              type="checkbox"
-              value="php"
-              id="language-php"
-            />
-            <label for="language-php">PHP</label>
-
-            <input
-              name="language[]"
-              type="checkbox"
-              value="tsx"
-              id="language-typescript"
-            />
-            <label for="language-typescript">TypeScript + JSX</label>
-
-            <input
-              name="language[]"
-              type="checkbox"
-              value="rust"
-              id="language-rust"
-            />
-            <label for="language-rust">Rust</label>
-
-            <input
-              name="language[]"
-              type="checkbox"
-              value="yaml"
-              id="language-yaml"
-            />
-            <label for="language-yaml">YAML</label>
+            <div>
+              <input
+                name="feature[]"
+                type="checkbox"
+                id="magit"
+                value="magit"
+              />
+              <label for="magit">Add a fully-featured git workflow</label>
+            </div>
           </div>
-        </div>
 
-        <button type="submit">build config</button>
-      </form>
+          <div>
+            <h4>Programming languages and tools</h4>
 
-      <h2>Kudos</h2>
-      <p>
-        Kudos to Philip's
-        <a href="https://emacs.amodernist.com/"
-          >Emacs Configuration Generator</a
-        >
-        for the idea. Use his configuration instead if you already have some
-        experience with Emacs and know what you like.
-      </p>
+            <div>
+              <p>
+                Although Emacs supports a whole bunch of languages out of the
+                box (Python, C, C++, etc.) it's likely you'll want to bring a
+                few extra modes along for the ride.
+              </p>
+              <p>Support these additional languages:</p>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="go"
+                id="language-go"
+              />
+              <label for="language-go">Go</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="lua"
+                id="language-lua"
+              />
+              <label for="language-lua">Lua</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="markdown"
+                id="language-md"
+              />
+              <label for="language-md">Markdown</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="php"
+                id="language-php"
+              />
+              <label for="language-php">PHP</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="tsx"
+                id="language-typescript"
+              />
+              <label for="language-typescript">TypeScript + JSX</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="rust"
+                id="language-rust"
+              />
+              <label for="language-rust">Rust</label>
+
+              <input
+                name="language[]"
+                type="checkbox"
+                value="yaml"
+                id="language-yaml"
+              />
+              <label for="language-yaml">YAML</label>
+            </div>
+          </div>
+
+          <button type="submit">build config</button>
+        </form>
+      </div>
+
+      <div>
+        <h2>Kudos</h2>
+        <p>
+          Kudos to Philip's
+          <a href="https://emacs.amodernist.com/"
+            >Emacs Configuration Generator</a
+          >
+          for the idea. Use his configuration instead if you already have some
+          experience with Emacs and know what you like.
+        </p>
+      </div>
     </main>
 
     <footer>
-      <a href="https://github.com/mgmarlow/emacs-config-generator"
-        >source on github</a
+      <a href="https://github.com/mgmarlow/emacs-config-generator">source</a>,
+      <a
+        href="https://github.com/mgmarlow/emacs-config-generator/blob/main/LICENSE"
+        >GPL-3.0</a
       >
     </footer>
   </body>

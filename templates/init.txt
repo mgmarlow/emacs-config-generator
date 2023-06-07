@@ -1,6 +1,6 @@
 ;;; Emacs configuration -*- lexical-binding: t -*-
 ;;;
-;;; Save this file to ~/.emacs.d/init.el.
+;;; Save this file to ~/.config/emacs/init.el.
 ;;; Afterwards, boot up Emacs and learn more about the contents
 ;;; of this file by reviewing the comments and using the built-in
 ;;; help system:
@@ -56,6 +56,7 @@
       frame-resize-pixelwise t
       load-prefer-newer t
       backup-by-copying t
+      backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
       ;; I'll add an extra note here since user customizations are important.
       ;; Emacs actually offers a UI-based customization menu, `M-x customize`.
       ;; You can use this menu to change variable values across Emacs. By default,

@@ -10,6 +10,9 @@ run:
 build:
 	cargo build
 
+test:
+	cargo test
+
 watch:
 	cargo watch -x run
 

@@ -1,5 +1,23 @@
 # Emacs Configuration Generator
 
-Generate a custom Emacs configuration by filling out a simple form. Built for Emacs 29.
+Generate an Emacs configuration that fits your preferences. Inspired by <https://emacs.amodernist.com/>.
 
-Inspired by https://emacs.amodernist.com/
+## Development
+
+Install dependencies:
+
+```
+make setup
+```
+
+Start watch mode:
+
+```
+make watch
+```
+
+Navigate to <localhost:8080>.
+
+## License
+
+Licensed under [GPL-v3.0](./LICENSE).

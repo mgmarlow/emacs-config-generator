@@ -25,7 +25,8 @@ async fn main() -> Result<()> {
     let app = Router::new()
         .route("/", get(index))
         .nest_service("/static", ServeDir::new("static"))
-        .route("/config", get(config));
+        .route("/config", get(config))
+        .fallback(handler_404);
 
     axum::Server::bind(&"0.0.0.0:8080".parse()?)
         .serve(app.into_make_service())
@@ -71,6 +72,10 @@ impl Into<ConfigTemplate> for EmacsConfig {
             languages: Languages::build_string(self.language),
         }
     }
+}
+
+async fn handler_404() -> impl IntoResponse {
+    (StatusCode::NOT_FOUND, "404 not found")
 }
 
 async fn config(Query(conf): Query<EmacsConfig>) -> impl IntoResponse {

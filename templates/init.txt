@@ -1,92 +1,106 @@
-;;; Emacs configuration -*- lexical-binding: t -*-
-;;;
-;;; Save this file to ~/.config/emacs/init.el.
-;;; Afterwards, boot up Emacs and learn more about the contents
-;;; of this file by reviewing the comments and using the built-in
-;;; help system:
-;;;
-;;; - variables: `C-h v` or `M-x describe-variable`
-;;; - commands: `C-h x` or `M-x describe-command`
-;;; - functions: `C-h f` or `M-x describe-function`
+;;; init.el --- Emacs configuration -*- lexical-binding: t -*-
 
-;; Performance tweaking, setting sane defaults for modern machines.
+;;; Commentary:
+
+;; Save the contents of this file to ~/.config/emacs/init.el and
+;; you're ready to boot up Emacs.
+
+;; Hack this file! One of the best ways to get started with Emacs is
+;; to look at other peoples' configurations and extract the pieces
+;; that work for you. That's where this configuration started. I
+;; encourage you to read through the code in this file and explore the
+;; functions and variables using the built-in help system (details
+;; below). Happy hacking!
+
+;; "C-<chr>  means hold the CONTROL key while typing the character <chr>.
+;; Thus, C-f would be: hold the CONTROL key and type f." (Emacs tutorial)
+;;
+;; - C-h t: Start the Emacs tutorial
+;; - C-h v my-variable: Describe variable
+;; - C-h f my-function: Describe function
+
+;;; Code:
+
+;; Performance tweaks for modern machines
 (setq gc-cons-threshold 100000000) ; 100 mb
 (setq read-process-output-max (* 1024 1024)) ; 1mb
 
-;; Adds a helpful message that tracks startup performance. Use this to
-;; help diagnose performance issues in your Emacs Lisp configuration.
-(add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (message "Emacs loaded in %s."
-		     (emacs-init-time))))
-
-;; Remove UI clutter: hide the scrollbar, menubar, and toolbar. You may
-;; want to keep these on when you're getting started, though I recommend
-;; working through the Emacs tutorial instead.
+;; Remove extra UI clutter by hiding the scrollbar, menubar, and toolbar.
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
-;; height = px * 100
+;; Set the font. Note: height = px * 100
 (set-face-attribute 'default nil :font "{{ font_family }}" :height 120)
 
-;; Unique buffer names in the minibuffer where there are many identical files.
-;; Super useful if you rely on folders for organization, say, foo/index.ts and
-;; bar/index.ts.
+;; Add unique buffer names in the minibuffer where there are many
+;; identical files. This is super useful if you rely on folders for
+;; organization and have lots of files with the same name,
+;; e.g. foo/index.ts and bar/index.ts.
 (require 'uniquify)
 
-;; A number of misc. modes and variable tweaks follow this comment, adding in
-;; functionality that I consider a "better default" Emacs experience. You can
-;; learn more about each of these modes and commands by looking up the mode
-;; via `C-h x electric-pair-mode`.
-(electric-pair-mode t)               ; Automatically insert closing parens
-(show-paren-mode 1)                  ; Visualize matching parens
-(setq-default indent-tabs-mode nil)  ; Prefer spaces to tabs
-(save-place-mode t)                  ; Automatically save your place in files
-(savehist-mode t)                    ; Save history in minibuffer to keep recent commands easily accessible
-(recentf-mode t)                     ; Keep track of open files
-(global-auto-revert-mode t)          ; Keep files up-to-date when they change outside Emacs
+;; Automatically insert closing parens
+(electric-pair-mode t)
+
+;; Visualize matching parens
+(show-paren-mode 1)
+
+;; Prefer spaces to tabs
+(setq-default indent-tabs-mode nil)
+
+;; Automatically save your place in files
+(save-place-mode t)
+
+;; Save history in minibuffer to keep recent commands easily accessible
+(savehist-mode t)
+
+;; Keep track of open files
+(recentf-mode t)
+
+;; Keep files up-to-date when they change outside Emacs
+(global-auto-revert-mode t)
 
 ;; Display line numbers only when in programming modes
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
-;; You can look up these variables with `C-h v variable-name`.
+;; The `setq' special form is used for setting variables. Remember
+;; that you can look up these variables with "C-h v variable-name".
 (setq uniquify-buffer-name-style 'forward
       window-resize-pixelwise t
       frame-resize-pixelwise t
       load-prefer-newer t
       backup-by-copying t
+      ;; Backups are placed into your Emacs directory, e.g. ~/.config/emacs/backups
       backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
       ;; I'll add an extra note here since user customizations are important.
-      ;; Emacs actually offers a UI-based customization menu, `M-x customize`.
+      ;; Emacs actually offers a UI-based customization menu, "M-x customize".
       ;; You can use this menu to change variable values across Emacs. By default,
-      ;; changing a variable will write to your `init.el` automatically, mixing
+      ;; changing a variable will write to your init.el automatically, mixing
       ;; your hand-written Emacs Lisp with automatically-generated Lisp from the
       ;; customize menu. The following setting instead writes customizations to a
-      ;; separate file, `custom.el`, to keep your `init.el` clean.
+      ;; separate file, custom.el, to keep your init.el clean.
       custom-file (expand-file-name "custom.el" user-emacs-directory))
 
-;; Set up package management with MELPA, an unofficial (but well-curated)
-;; package registry. By default Emacs only uses GNU ELPA and NonGNU ELPA.
-;; https://elpa.gnu.org/, https://elpa.nongnu.org/.
+;; Bring in package utilities so we can install packages from the web.
 (require 'package)
+
+;; Add MELPA, an unofficial (but well-curated) package registry to the
+;; list of accepted package registries. By default Emacs only uses GNU
+;; ELPA and NonGNU ELPA, https://elpa.gnu.org/ and
+;; https://elpa.nongnu.org/ respectively.
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+
+;; Unless we've already fetched (and cached) the package archives,
+;; refresh them.
 (unless package-archive-contents
   (package-refresh-contents))
 
-;; A quick primer on the `use-package' function (refer to `C-h f use-package`
-;; for the full details). This package helps organize third-party packages from
-;; the `package-archives'. ":ensure t" ensures that the package is installed,
-;; fetching it from the package registry it it doesn't exist on your system.
-;; The other keyword arguments are for additional configuration. :config is
-;; a catch-all for functions you want run after the package is loaded, and
-;; basically every other keyword argument that you see could be equivalently
-;; used in :config. However, this file also uses :hook, :bind, and :custom
-;; to idiomatically define certain properties for the package.
+;; A quick primer on the `use-package' function (refer to
+;; "C-h f use-package" for the full details).
 ;;
-;; (use-package my-package
+;; (use-package my-package-name
 ;;   :ensure t    ; Ensure my-package is installed
-;;   :after foo   ; Load my-package only after foo is loaded (seldom used)
+;;   :after foo   ; Load my-package after foo is loaded (seldom used)
 ;;   :init        ; Run this code before my-package is loaded
 ;;   :bind        ; Bind these keys to these functions
 ;;   :custom      ; Set these variables
@@ -99,14 +113,12 @@
   :config
   (ef-themes-select {{ theme }}))
 
-;; An Emacs completion framework. Minibuffer completion is essential to your
-;; Emacs experience, and Vertico is currently one of the best. It's worth
-;; diving into the details here and reading "Understanding Minibuffer Completion"
-;; by Mickey Peterson (linked below). Getting minibuffer completion right will
-;; help accelerate your Emacs learning by orders of magnitude, making it easy
-;; to locate and discover commands for your day-to-day editing tasks.
-;; https://www.masteringemacs.org/article/understanding-minibuffer-completion
-;; https://elpa.gnu.org/packages/vertico.html
+;; Minibuffer completion is essential to your Emacs workflow and
+;; Vertico is currently one of the best out there. There's a lot to
+;; dive in here so I recommend checking out the documentation for more
+;; details: https://elpa.gnu.org/packages/vertico.html. The short and
+;; sweet of it is that you search for commands with "M-x do-thing" and
+;; the minibuffer will show you a filterable list of matches.
 (use-package vertico
   :ensure t
   :custom
@@ -117,20 +129,19 @@
   :init
   (vertico-mode))
 
-;; Adds annotations to your minibuffer to improve the accessibility of
-;; Emac's documentation.
-;; https://elpa.gnu.org/packages/marginalia.html
+;; Improve the accessibility of Emacs documentation by placing
+;; descriptions directly in your minibuffer. Give it a try:
+;; "M-x find-file".
 (use-package marginalia
   :after vertico
   :ensure t
   :init
   (marginalia-mode))
 
-;; Adds intellisense-style code completion at point. Works great with
-;; LSP via Eglot. Note that you'll likely want to configure this one
-;; to match your editing preferences, there's no one-size-fits-all
+;; Adds intellisense-style code completion at point that works great
+;; with LSP via Eglot. You'll likely want to configure this one to
+;; match your editing preferences, there's no one-size-fits-all
 ;; solution.
-;; https://elpa.gnu.org/packages/corfu.html
 (use-package corfu
   :ensure t
   :init

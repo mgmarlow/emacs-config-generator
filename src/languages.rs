@@ -27,19 +27,15 @@ const MARKDOWN: &str = r#"
 "#;
 
 const PHP: &str = r#"
-;; Note that `php-mode' assumes php code is separated from HTML code,
-;; following modern Laravel best practices. If you'd like to combine
-;; PHP and HTML in a single file, you may prefer `web-mode'.
+;; Note that `php-mode' assumes php code is separate from HTML.
+;; If you prefer working with PHP and HTML in a single file you
+;; may prefer `web-mode'.
 (use-package php-mode
   :ensure t)
 "#;
 
 const TSX: &str = r#"
-;; Typescript, JS, & React support is provided by web-mode. This differs
-;; from other programming languages because TSX is really multi-language
-;; by design, including both TypeScript and HTML in a single file. I've
-;; found web-mode provides the best TSX experience and works equally well
-;; for plain ol' JS or TS.
+;; TypeScript, JS, and JSX/TSX support.
 (use-package web-mode
   :ensure t
   :mode (("\\.ts\\'" . web-mode)
@@ -85,7 +81,7 @@ pub fn eglot(languages: Vec<String>) -> String {
     let hooks_extra: String = if hooks.len() > 0 {
         format!(
             r#"
-  ;; Add your programming modes here to automatically start eglot,
+  ;; Add your programming modes here to automatically start Eglot,
   ;; assuming you have the respective LSP server installed.
   :hook ({:})"#,
             hooks.join("\n         "),
@@ -109,9 +105,8 @@ pub fn eglot(languages: Vec<String>) -> String {
     format!(
         r#"
 ;; Adds LSP support. Note that you must have the respective LSP
-;; server installed on your machine to use it with Eglot. e.g. I
-;; must have rust-analyzer installed to use Eglot with `rust-mode'.
-;; https://joaotavora.github.io/eglot/
+;; server installed on your machine to use it with Eglot. e.g.
+;; rust-analyzer to use Eglot with `rust-mode'.
 (use-package eglot
   :ensure t
   :bind (("s-<mouse-1>" . eglot-find-implementation)

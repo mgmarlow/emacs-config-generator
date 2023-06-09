@@ -1,10 +1,9 @@
 use crate::ConfigBuilder;
 
 const HELPFUL: &str = r#"
-;; Helpful adds contextual information to Emacs help documentation, making
-;; it easier to locate code examples and see sample usage when looking
-;; up functions or variables.
-;; https://github.com/Wilfred/helpful
+;; Add extra context to Emacs documentation to help make it easier to
+;; search and understand. This configuration uses the keybindings 
+;; recommended by the package author.
 (use-package helpful
   :ensure t
   :bind (("C-h f" . #'helpful-callable)
@@ -16,12 +15,10 @@ const HELPFUL: &str = r#"
 "#;
 
 const VIM: &str = r#"
-;; Evil adds vim emulation to Emacs. Activating `evil-mode' will swap your
-;; regular keybindings to modal editing with vim, which this use-package
-;; call configures globally. Since there's a ton of keybindings that Evil
-;; needs to modify it'll occasionally lack support for a particular 
-;; package. Evil Collection fills in those missing gaps.
-;; https://github.com/emacs-evil/evil
+;; Adds vim emulation. Activate `evil-mode' to swap your default Emacs
+;; keybindings with the modal editor of great infamy. There's a ton of
+;; keybindings that Evil needs to modify, so this configuration also
+;; includes `evil-collection' to fill in the gaps.
 (use-package evil
   :ensure t
   :init
@@ -30,7 +27,6 @@ const VIM: &str = r#"
   :config
   (evil-mode 1))
 
-;; Adds better Evil defaults for most built-in packages
 (use-package evil-collection
   :after evil
   :ensure t
@@ -39,9 +35,11 @@ const VIM: &str = r#"
 "#;
 
 const DENOTE: &str = r#"
-;; `org-mode' is great but Denote makes it even better. Denote helps organize
-;; your org (or plain text/markdown) notes with a intelligent naming scheme
-;; and some helpful utilities. I highly recommend reading the manual:
+;; `org-mode' is great but Denote makes it even better by adding
+;; features that you'd find in something like Obsidian (like
+;; backlinks!). You can write your notes in org, markdown, or plain
+;; text, though I recommend giving `org-mode' a try if you've never
+;; used it before. The Denote manual is also excellent:
 ;; https://protesilaos.com/emacs/denote
 (use-package denote
   :ensure t
@@ -56,23 +54,24 @@ const DENOTE: &str = r#"
 "#;
 
 const MAGIT: &str = r#"
-;; Magit is a fully-featured git frontend. After working with Magit you may
-;; never want to go back to the git CLI. Activate it with `C-c g`.
-;; https://magit.vc/
+;; An extremely feature-rich git client. Activate it with "C-c g".
 (use-package magit
   :ensure t
   :bind (("C-c g" . magit-status)))
 "#;
 
 const BREADCRUMBS: &str = r#"
-;; You can install packages from version control with use-package and
-;; the :vc keyword argument. For the list of supported fetchers, view
-;; the documentation for the variable `vc-use-package-fetchers'.
+;; In addition to installing packages from the configured package
+;; registries, you can also install straight from version control
+;; with the :vc keyword argument. For the full list of supported
+;; fetchers, view the documentation for the variable
+;; `vc-use-package-fetchers'.
 ;;
-;; Breadcrumb adds breadcrumbs to the top of your open buffers and works
-;; great with project.el, Emacs's built-in project management package.
+;; Breadcrumb adds, well, breadcrumbs to the top of your open buffers
+;; and works great with project.el, the Emacs project manager.
+;;
+;; Read more about projects here:
 ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Projects.html
-;; https://github.com/joaotavora/breadcrumb
 (use-package breadcrumb
   :vc (:fetcher github :repo joaotavora/breadcrumb)
   :init (breadcrumb-mode))

@@ -154,9 +154,8 @@ mod test {
             eglot(vec![]),
             r#"
 ;; Adds LSP support. Note that you must have the respective LSP
-;; server installed on your machine to use it with Eglot. e.g. I
-;; must have rust-analyzer installed to use Eglot with `rust-mode'.
-;; https://joaotavora.github.io/eglot/
+;; server installed on your machine to use it with Eglot. e.g.
+;; rust-analyzer to use Eglot with `rust-mode'.
 (use-package eglot
   :ensure t
   :bind (("s-<mouse-1>" . eglot-find-implementation)
@@ -168,14 +167,13 @@ mod test {
             eglot(vec![String::from("go"), String::from("rust")]),
             r#"
 ;; Adds LSP support. Note that you must have the respective LSP
-;; server installed on your machine to use it with Eglot. e.g. I
-;; must have rust-analyzer installed to use Eglot with `rust-mode'.
-;; https://joaotavora.github.io/eglot/
+;; server installed on your machine to use it with Eglot. e.g.
+;; rust-analyzer to use Eglot with `rust-mode'.
 (use-package eglot
   :ensure t
   :bind (("s-<mouse-1>" . eglot-find-implementation)
          ("C-c ." . eglot-code-action-quickfix))
-  ;; Add your programming modes here to automatically start eglot,
+  ;; Add your programming modes here to automatically start Eglot,
   ;; assuming you have the respective LSP server installed.
   :hook ((go-mode . eglot-ensure)
          (rust-mode . eglot-ensure)))
@@ -186,14 +184,13 @@ mod test {
             eglot(vec![String::from("tsx")]),
             r#"
 ;; Adds LSP support. Note that you must have the respective LSP
-;; server installed on your machine to use it with Eglot. e.g. I
-;; must have rust-analyzer installed to use Eglot with `rust-mode'.
-;; https://joaotavora.github.io/eglot/
+;; server installed on your machine to use it with Eglot. e.g.
+;; rust-analyzer to use Eglot with `rust-mode'.
 (use-package eglot
   :ensure t
   :bind (("s-<mouse-1>" . eglot-find-implementation)
          ("C-c ." . eglot-code-action-quickfix))
-  ;; Add your programming modes here to automatically start eglot,
+  ;; Add your programming modes here to automatically start Eglot,
   ;; assuming you have the respective LSP server installed.
   :hook ((web-mode . eglot-ensure))
   :config

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Emacs Config Generator</title>
+    <title>Emacs starter kit</title>
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -26,24 +26,25 @@
   </head>
   <body>
     <header>
-      <h1>Emacs configuration builder</h1>
-      <p>An opinionated configuration to help kick-start your hacking.</p>
+      <h1>Emacs starter kit</h1>
+      <p>A config builder with sensible defaults.</p>
     </header>
 
     <main>
       <div>
         <h2>Why?</h2>
         <p>
-          Emacs is great and more people should try it. Jumping into
+          Getting started with Emacs can be tough. Not only do you have to learn
+          a bunch of new keybindings, you also need to know enough Emacs Lisp to
+          coerce the editor to behave how you'd expect. Jumping into
           <a href="https://github.com/doomemacs/doomemacs">Doom</a> seems like a
-          smart way to cut past the learning curve, but I think it's better to
-          start your own configuration and learn Emacs Lisp without introducing
-          additional layers of complexity.
+          smart way to skip the learning curve, but ends up adding too much
+          friction when you learn enough to make it your own.
         </p>
         <p>
-          This form helps kickstart your hacking with a modern-feeling
-          configuration while only relying on a single file of Emacs Lisp. It
-          assumes Emacs 29 (the
+          This starter kit offers a middle ground. It provides modern
+          conveniences and hand-crafted settings while retaining the simplicity
+          of a single file of Emacs Lisp. It assumes Emacs 29 (the
           <a
             href="https://lists.gnu.org/archive/html/emacs-devel/2023-05/msg00379.html"
             >soon-to-be latest version</a
@@ -51,12 +52,11 @@
           <a
             href="https://git.savannah.gnu.org/cgit/emacs.git/tree/etc/NEWS?h=emacs-29"
             >new features</a
-          >. The generated file is also heavily annotated with comments to help
-          explain some basic Emacs Lisp esoterica to guide your exploration.
+          >. The config is heavily annotated with comments to guide you through
+          Emacs Lisp esoterica and help you build Emacs your way.
         </p>
 
         <h3>What's in the config?</h3>
-        <p>Along with your selected preferences, you get:</p>
         <ul>
           <li>
             <strong>Opinionated defaults</strong> that incorporate lots of
@@ -66,8 +66,15 @@
             >, among other hand-picked settings.
           </li>
           <li>
-            <strong>Feature packages</strong> that augment the Emacs baseline
-            with extra functionality, including
+            <strong>Package management</strong> organization and helpers with
+            <a href="https://jwiegley.github.io/use-package/">use-package</a>.
+          </li>
+          <li>
+            <strong>LSP support</strong> with
+            <a href="https://joaotavora.github.io/eglot/">Eglot</a>.
+          </li>
+          <li>
+            <strong>Enhanced built-ins</strong> with
             <a href="https://elpa.gnu.org/packages/vertico.html">Vertico</a>,
             <a href="https://elpa.gnu.org/packages/corfu.html">Corfu</a>, and
             <a href="https://elpa.gnu.org/packages/marginalia.html"
@@ -79,8 +86,8 @@
             supported OOTB.
           </li>
           <li>
-            <strong>Code comments</strong> that annotate all the important stuff
-            to help you hack the config to your taste.
+            <strong>Code comments</strong> that annotate all the important
+            stuff.
           </li>
         </ul>
       </div>
@@ -89,7 +96,7 @@
         <h2>Get started</h2>
         <p>
           First, download Emacs 29 (the version matters). Then fill out the form
-          below and generate your config file. Take that file and drop it into
+          below to generate your config file. Take that file and drop it into
           your
           <a
             href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html"

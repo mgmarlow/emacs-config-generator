@@ -16,8 +16,8 @@
 ;; Thus, C-f would be: hold the CONTROL key and type f." (Emacs tutorial)
 ;;
 ;; - C-h t: Start the Emacs tutorial
-;; - C-h v my-variable: Describe variable
-;; - C-h f my-function: Describe function
+;; - C-h o some-symbol: Describe symbol
+;; - C-h C-q: Pull up the quick-help cheatsheet
 
 ;;; Code:
 

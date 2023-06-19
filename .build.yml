@@ -1,0 +1,11 @@
+image: debian/stable
+packages:
+  - curl
+sources:
+  - https://git.sr.ht/~mgmarlow/emacs-config-generator
+tasks:
+  - install: curl https://sh.rustup.rs -sSf | sh -s -- -y
+  - build: |
+      PATH="$HOME/.cargo/bin:$PATH" make build
+  - test: |
+      PATH="$HOME/.cargo/bin:$PATH" make test

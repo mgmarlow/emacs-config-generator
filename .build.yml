@@ -6,6 +6,8 @@ sources:
 tasks:
   - install: curl https://sh.rustup.rs -sSf | sh -s -- -y
   - build: |
+      cd emacs-config-generator
       PATH="$HOME/.cargo/bin:$PATH" cargo build
   - test: |
+      cd emacs-config-generator
       PATH="$HOME/.cargo/bin:$PATH" cargo test

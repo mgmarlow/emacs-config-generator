@@ -2,8 +2,9 @@
 
 [![builds.sr.ht status](https://builds.sr.ht/~mgmarlow/emacs-config-generator/commits/main/.build.yml.svg)](https://builds.sr.ht/~mgmarlow/emacs-config-generator/commits/main/.build.yml?)
 
-Generate an Emacs configuration that suits your preferences: https://emacs-config-generator.fly.dev/
+Jumpstart your Emacs configuration with sensible defaults and settings tuned to your preferences: https://emacs-config-generator.fly.dev/.
 
+![Screenshot](./img/screenshot.png)
 
 ## Development
 
@@ -19,7 +20,7 @@ Start watch mode:
 make watch
 ```
 
-Navigate to <localhost:8080>.
+Navigate to <http://localhost:8080>.
 
 ## License
 

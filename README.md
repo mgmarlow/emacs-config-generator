@@ -4,7 +4,7 @@
 
 Jumpstart your Emacs configuration with sensible defaults and settings tuned to your preferences: https://emacs-config-generator.fly.dev/.
 
-![Screenshot](./img/screenshot.png)
+![Screenshot](./img/screenshot.jpg)
 
 ## Development
 

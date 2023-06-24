@@ -1,5 +1,10 @@
 use crate::ConfigBuilder;
 
+const ELIXIR: &str = r#"
+(use-package elixir-mode
+  :ensure t)
+"#;
+
 const GO: &str = r#"
 (use-package go-mode
   :ensure t
@@ -10,6 +15,11 @@ const GO: &str = r#"
 
 const LUA: &str = r#"
 (use-package lua-mode
+  :ensure t)
+"#;
+
+const JULIA: &str = r#"
+(use-package julia-mode
   :ensure t)
 "#;
 
@@ -125,7 +135,9 @@ impl ConfigBuilder for Languages {
 
         for lang in languages {
             let config = match lang.as_str() {
+                "elixir" => Some(ELIXIR),
                 "go" => Some(GO),
+                "julia" => Some(JULIA),
                 "lua" => Some(LUA),
                 "markdown" => Some(MARKDOWN),
                 "php" => Some(PHP),
@@ -136,7 +148,7 @@ impl ConfigBuilder for Languages {
             };
 
             if let Some(config) = config {
-                result = result + config;
+                result += config;
             }
         }
 

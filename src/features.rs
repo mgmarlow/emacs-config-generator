@@ -77,6 +77,29 @@ const BREADCRUMBS: &str = r#"
   :init (breadcrumb-mode))
 "#;
 
+const LISP: &str = r#"
+;; As you've probably noticed, Lisp has a lot of parentheses.
+;; Maintaining the syntactical correctness of these parentheses
+;; can be a pain when you're first getting started with Lisp,
+;; especially when you're fighting the urge to break up groups
+;; of closing parens into separate lines. Luckily we have
+;; Paredit, a package that maintains the structure of your
+;; parentheses for you. At first, Paredit might feel a little
+;; odd; you'll probably need to look at a tutorial (linked
+;; below) or read the docs before you can use it effectively.
+;; But once you pass that initial barrier you'll write Lisp
+;; code like it's second nature.
+;; http://danmidwood.com/content/2014/11/21/animated-paredit.html
+;; https://stackoverflow.com/a/5243421/3606440
+(use-package paredit
+  :ensure t
+  :hook ((emacs-lisp-mode . enable-paredit-mode)
+         (lisp-mode . enable-paredit-mode)
+         (ielm-mode . enable-paredit-mode)
+         (lisp-interaction-mode . enable-paredit-mode)
+         (scheme-mode . enable-paredit-mode)))
+"#;
+
 pub struct Features {}
 
 impl ConfigBuilder for Features {
@@ -91,11 +114,12 @@ impl ConfigBuilder for Features {
                 "denote" => Some(DENOTE),
                 "magit" => Some(MAGIT),
                 "breadcrumbs" => Some(BREADCRUMBS),
+                "lisp" => Some(LISP),
                 _ => None,
             };
 
             if let Some(config) = config {
-                result = result + config;
+                result += config;
             }
         }
 

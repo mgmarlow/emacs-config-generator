@@ -95,6 +95,12 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
+;; Add the :vc keyword to use-package, making it easy to install
+;; packages directly from git repositories.
+(unless (package-installed-p 'vc-use-package)
+  (package-vc-install "https://github.com/slotThe/vc-use-package"))
+(require 'vc-use-package)
+
 ;; A quick primer on the `use-package' function (refer to
 ;; "C-h f use-package" for the full details).
 ;;
